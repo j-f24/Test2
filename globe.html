@@ -1,1 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://unpkg.com/globe.gl"></script>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+    #globe {
+      width: 100vw;
+      height: 100vh;
+    }
+    canvas { display: block; } /* avoids tiny gaps/scrollbars */
+  </style>
+</head>
 
+<body>
+  <div id="globe"></div>
+
+  <script>
+    const globeEl = document.getElementById('globe');
+
+    // Create and mount the globe first
+    const globe = Globe()(globeEl)
+      .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+      .onGlobeClick(({ lat, lng }) => {
+        let continent = "Unknown";
+
+        if (lat > 0 && lng < -30 && lng > -170) continent = "North America";
+        else if (lat < 0 && lng < -30) continent = "South America";
+        else if (lat > 35 && lng > -10 && lng < 60) continent = "Europe";
+        else if (lat < 35 && lat > -35 && lng > 10 && lng < 50) continent = "Africa";
+        else if (lat > 0 && lng > 60) continent = "Asia";
+        else if (lat < -35 && lng > 110) continent = "Australia";
+
+        if (window.AppInventor && window.AppInventor.setWebViewString) {
+          window.AppInventor.setWebViewString(continent);
+        }
+      });
+
+    // Force the WebGL background color (this is the reliable fix)
+    // Pick any color you want:
+    globe.renderer().setClearColor('#ffffff', 1); // white
+    // globe.renderer().setClearColor('#87CEEB', 1); // skyblue
+    // globe.renderer().setClearColor('#001f3f', 1); // navy
+  </script>
+</body>
+</html>
