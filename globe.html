@@ -1,37 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="https://unpkg.com/globe.gl"></script>
-
-<style>
-body { 
-  margin: 0; 
-  overflow: hidden; 
-  background-color: lightpurple;}
-</style>
-  
+  <script src="https://unpkg.com/globe.gl"></script>
+  <style>
+    body { 
+      margin: 0; 
+      overflow: hidden; 
+    }
+    #globe {
+      width: 100vw;
+      height: 100vh;
+    }
+  </style>
 </head>
+
 <body>
-<div id="globe"></div>
+  <div id="globe"></div>
 
+  <script>
+    const globe = Globe()
+      .backgroundColor('purple')  // 🔵 Change this color if you want
+      .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+      .onGlobeClick(({ lat, lng }) => {
 
+        let continent = "Unknown";
 
-<script>
-const globe = Globe()
-.globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
-.onGlobeClick(({ lat, lng }) => {
-let continent = "Unknown";
+        if (lat > 0 && lng < -30 && lng > -170) continent = "North America";
+        else if (lat < 0 && lng < -30) continent = "South America";
+        else if (lat > 35 && lng > -10 && lng < 60) continent = "Europe";
+        else if (lat < 35 && lat > -35 && lng > 10 && lng < 50) continent = "Africa";
+        else if (lat > 0 && lng > 60) continent = "Asia";
+        else if (lat < -35 && lng > 110) continent = "Australia";
 
-if (lat > 0 && lng < -30 && lng > -170) continent = "North America";
-else if (lat < 0 && lng < -30) continent = "South America";
-else if (lat > 35 && lng > -10 && lng < 60) continent = "Europe";
-else if (lat < 35 && lat > -35 && lng > 10 && lng < 50) continent = "Africa";
-else if (lat > 0 && lng > 60) continent = "Asia";
-else if (lat < -35 && lng > 110) continent = "Australia";
+        if (window.AppInventor) {
+          window.AppInventor.setWebViewString(continent);
+        }
 
-window.AppInventor.setWebViewString(continent);
-})
-(document.getElementById('globe'));
-</script>
+      });
+
+    globe(document.getElementById('globe'));
+  </script>
+
 </body>
 </html>
